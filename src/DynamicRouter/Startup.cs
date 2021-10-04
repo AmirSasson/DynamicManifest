@@ -1,10 +1,14 @@
+using DynamicRoutes.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Linq;
 using System.Net.Http;
 
 namespace DynamicRoutes
@@ -42,8 +46,9 @@ namespace DynamicRoutes
 
             app.Use(async (context, next) =>
             {
-                var cleanedPath = context.Request.Path.ToClean();
-                if (Controllers.EndpointsManifestController.ManifestDB.TryGetValue(cleanedPath, out var endpoint))
+                var cleanedPath = context.Request.Path.ToClean();                
+
+                if (TryGetEndpoint(context, out var endpoint))
                 {
                     HttpClient c = new HttpClient();
                     UriBuilder b = new UriBuilder("http", "localhost", endpoint.Port, cleanedPath);
@@ -67,6 +72,24 @@ namespace DynamicRoutes
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static bool TryGetEndpoint(HttpContext context, out ApiEndpoint endpoint)
+        {
+            endpoint = null;
+            var key = Controllers.EndpointsManifestController.ManifestDB.Keys.FirstOrDefault(pattern =>
+            {
+                var template = TemplateParser.Parse(pattern);
+                var matcher = new TemplateMatcher(template, new RouteValueDictionary());
+
+                var isMatch = matcher.TryMatch(context.Request.Path, new RouteValueDictionary());
+                return isMatch;
+            });
+            if (key != null)
+            {
+                endpoint = Controllers.EndpointsManifestController.ManifestDB[key];
+            }
+            return endpoint != null;
         }
     }
 }

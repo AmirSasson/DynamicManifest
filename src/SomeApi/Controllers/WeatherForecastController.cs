@@ -34,5 +34,16 @@ namespace SomeApi.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("{id}")]
+        public WeatherForecast GetById(int id)
+        {
+            return new WeatherForecast
+            {
+                Date = DateTime.Now,
+                TemperatureC = 4,
+                Summary = WeatherForecastController.Summaries[0]
+            };
+        }
     }
 }
