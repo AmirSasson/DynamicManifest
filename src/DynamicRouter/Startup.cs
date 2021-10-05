@@ -44,6 +44,8 @@ namespace DynamicRoutes
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.Use(async (context, next) =>
             {
                 var cleanedPath = context.Request.Path.ToClean();                
@@ -66,7 +68,6 @@ namespace DynamicRoutes
                 }
             });
 
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

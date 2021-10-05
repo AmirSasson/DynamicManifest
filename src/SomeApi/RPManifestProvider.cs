@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
+using SomeApi.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +18,19 @@ namespace SomeApi
 
             foreach (var endpoint in (endpointSources.First().Endpoints.Cast<RouteEndpoint>()))
             {
-                try
+                var manifestEndpointMetaData = endpoint?.Metadata?.SingleOrDefault(md => md is ManifestEndpointAttribute) as ManifestEndpointAttribute;
+                if (manifestEndpointMetaData?.Register ?? false)
                 {
-                    var resp = await c.PutAsJsonAsync(url, new { path = endpoint.RoutePattern.RawText, port = 5001 });
+                    try
+                    {
+                        var resp = await c.PutAsJsonAsync(url, new { throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = 5001 });
+                    }
+                    catch (Exception e)
+                    {
+                        throw;
+                    }
                 }
-                catch (Exception e)
-                {
-                    throw;
-                }
+
             }
         }
     }
