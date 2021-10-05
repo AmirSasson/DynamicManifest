@@ -1,5 +1,6 @@
 using DynamicRoutes.Auth;
 using DynamicRoutes.Controllers;
+using DynamicRoutes.DataAccess;
 using DynamicRoutes.Middlewares;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,8 @@ namespace DynamicRoutes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSingleton<IEndpointsManifestRespository, InMemoryEndpointsManifestRespository>();
 
             services.AddAuthentication().AddScheme<WWWAuthenticationOptions, WWWAuthenticationHandler>(
               "WWW",

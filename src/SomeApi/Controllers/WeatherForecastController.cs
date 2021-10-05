@@ -36,17 +36,32 @@ namespace SomeApi.Controllers
             .ToArray();
         }
 
-        [HttpGet("{id}")]
-        [ManifestEndpoint]
-        public WeatherForecast GetById(int id)
+
+        [HttpGet("{name:alpha}")]
+        [ManifestEndpoint(true, throttleLimit: 50, SomeMore = "amir")]
+        public WeatherForecast GetByIdAnatString(string name)
         {
             return new WeatherForecast
             {
                 Date = DateTime.Now,
                 TemperatureC = 4,
-                Summary = WeatherForecastController.Summaries[0]
+                Summary = name
             };
         }
+
+
+        [HttpGet("{id:int}")]
+        [ManifestEndpoint]
+        public WeatherForecast GetByIdAnat(int id)
+        {
+            return new WeatherForecast
+            {
+                Date = DateTime.Now,
+                TemperatureC = 4,
+                Summary = "GetByIdAnat"
+            };
+        }
+
 
         [HttpGet("Laith")]
         [ManifestEndpoint(true, 6000)]

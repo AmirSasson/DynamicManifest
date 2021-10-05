@@ -1,4 +1,5 @@
 ﻿using DynamicRoutes.Controllers;
+using DynamicRoutes.DataAccess;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -21,13 +22,13 @@ namespace DynamicRoutes.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService)
+        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService, IEndpointsManifestRespository endpointRepo)
         {
             var cleanedPath = context.Request.Path.ToClean();
-
-            if (TryGetEndpoint(context, out var endpoint))
+            ApiEndpoint endpoint;
+            if ((endpoint = await getEndpoint(context, endpointRepo)) != null)
             {
-                var authenticationResult = await authenticationService.AuthenticateAsync(context, "WWW");                               
+                var authenticationResult = await authenticationService.AuthenticateAsync(context, "WWW");
                 var authorized = authenticationResult.Succeeded;
 
                 if (authorized)
@@ -53,19 +54,18 @@ namespace DynamicRoutes.Middlewares
             }
         }
 
-        private static bool TryGetEndpoint(HttpContext context, out ApiEndpoint endpoint)
-        {            
-            var key = Controllers.EndpointsManifestController.ManifestDB.Keys.FirstOrDefault(pattern =>
+        private static async Task<ApiEndpoint> getEndpoint(HttpContext context, IEndpointsManifestRespository endpointRepo)
+        {
+            var endpoint = (await endpointRepo.GetAll()).FirstOrDefault(ep =>
             {
-                var template = TemplateParser.Parse(pattern);
+                var template = TemplateParser.Parse(ep.Path);
                 var matcher = new TemplateMatcher(template, new RouteValueDictionary());
 
                 var isMatch = matcher.TryMatch(context.Request.Path, new RouteValueDictionary());
                 return isMatch;
             });
-
-            endpoint = key != null ? Controllers.EndpointsManifestController.ManifestDB[key] : null;
-            return endpoint != null;
+            
+            return endpoint;
         }
     }
 

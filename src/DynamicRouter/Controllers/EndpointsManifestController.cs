@@ -1,4 +1,5 @@
 ﻿using DynamicRoutes;
+using DynamicRoutes.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,26 +13,26 @@ namespace DynamicRoutes.Controllers
     [Route("[controller]")]
     public class EndpointsManifestController : ControllerBase
     {
-        public static Dictionary<string, ApiEndpoint> ManifestDB = new Dictionary<string, ApiEndpoint>();
-
         private readonly ILogger<EndpointsManifestController> _logger;
+        private readonly IEndpointsManifestRespository _manifestRepo;
 
-        public EndpointsManifestController(ILogger<EndpointsManifestController> logger)
+        public EndpointsManifestController(ILogger<EndpointsManifestController> logger, IEndpointsManifestRespository manifestRepo)
         {
             _logger = logger;
+            _manifestRepo = manifestRepo;
         }
 
         [HttpPut]
-        public IActionResult Put(ApiEndpoint endpoint)
+        public async Task<IActionResult> Put(ApiEndpoint endpoint)
         {
-            ManifestDB[endpoint.Path.ToClean()] = endpoint;
+            await _manifestRepo.Add(endpoint);
             return Ok();
         }
 
         [HttpGet()]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(ManifestDB);
+            return Ok(await _manifestRepo.GetAll());
         }
 
         //[HttpGet("external")]
