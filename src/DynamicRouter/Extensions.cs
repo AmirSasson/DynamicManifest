@@ -1,5 +1,6 @@
-﻿namespace DynamicRoutes
+﻿using System.Threading.Tasks;
 
+namespace DynamicRoutes
 {
     public static class Extensions
     {
@@ -7,11 +8,9 @@
         {
             return somePath.ToString().ToLower().Trim().Trim('/');
         }
-
-        //public static string ToClean<T>(this PathString somePath)
-        //{
-        //    return somePath.ToString().ToLower().Trim().Trim('/');
-        //}
-
+        public static Task<TObj> AsTask<TObj>(this TObj any)
+        {
+            return Task.FromResult(any);
+        }
     }
 }
