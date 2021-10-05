@@ -19,7 +19,8 @@ namespace DynamicRoutes.Auth
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {            
             var cer = base.Context.Connection.ClientCertificate;
-            return AuthenticateResult.Success(CreateTicket()).AsTask();            
+            return AuthenticateResult.Success(CreateTicket()).AsTask();
+            //return AuthenticateResult.Fail(new Exception("Authentication Failure")).AsTask();
         }
 
         private AuthenticationTicket CreateTicket()

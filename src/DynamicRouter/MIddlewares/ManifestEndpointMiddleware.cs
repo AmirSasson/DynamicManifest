@@ -21,25 +21,30 @@ namespace DynamicRoutes.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService)
         {
-            var authenticationService = context.RequestServices.GetService<IAuthenticationService>();
-            var authenticationResult = await authenticationService.AuthenticateAsync(context, "WWW");
-
-            var authorized = authenticationResult.Succeeded;
-
             var cleanedPath = context.Request.Path.ToClean();
 
             if (TryGetEndpoint(context, out var endpoint))
             {
-                HttpClient c = new HttpClient();
-                UriBuilder b = new UriBuilder("http", "localhost", endpoint.Port, cleanedPath);
-                b.Query = context.Request.QueryString.ToString();
-                using var req = new HttpRequestMessage(new HttpMethod(context.Request.Method), b.Uri) {/* body.. headers .. more */};
-                var resp = await c.SendAsync(req);
-                context.Response.StatusCode = (int)resp.StatusCode;
-                await context.Response.WriteAsync(await resp.Content.ReadAsStringAsync());
-                return;
+                var authenticationResult = await authenticationService.AuthenticateAsync(context, "WWW");                               
+                var authorized = authenticationResult.Succeeded;
+
+                if (authorized)
+                {
+                    HttpClient c = new HttpClient();
+                    UriBuilder b = new UriBuilder("http", "localhost", endpoint.Port, cleanedPath);
+                    b.Query = context.Request.QueryString.ToString();
+                    using var req = new HttpRequestMessage(new HttpMethod(context.Request.Method), b.Uri) {/* body.. headers .. more */};
+                    var resp = await c.SendAsync(req);
+                    context.Response.StatusCode = (int)resp.StatusCode;
+                    await context.Response.WriteAsync(await resp.Content.ReadAsStringAsync());
+                    return;
+                }
+                else
+                {
+                    throw authenticationResult.Failure;
+                }
             }
             else
             {
