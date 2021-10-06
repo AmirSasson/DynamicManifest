@@ -1,20 +1,11 @@
 using DynamicRoutes.Auth;
-using DynamicRoutes.Controllers;
 using DynamicRoutes.DataAccess;
 using DynamicRoutes.Middlewares;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Linq;
-using System.Net.Http;
 
 namespace DynamicRoutes
 {
