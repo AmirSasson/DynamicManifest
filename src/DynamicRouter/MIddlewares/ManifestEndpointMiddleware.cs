@@ -1,4 +1,5 @@
-﻿using DynamicRoutes.Controllers;
+﻿using Common;
+using DynamicRoutes.Controllers;
 using DynamicRoutes.DataAccess;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -22,7 +24,7 @@ namespace DynamicRoutes.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService, IEndpointsManifestRespository endpointRepo)
+        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService, IEndpointsManifestRespository endpointRepo, ILogger<ManifestEndpointMiddleware> logger)
         {
             var cleanedPath = context.Request.Path.ToClean();
             ApiEndpoint endpoint;
@@ -33,6 +35,7 @@ namespace DynamicRoutes.Middlewares
 
                 if (authorized)
                 {
+                    logger.LogInformation($"Delegating to endpoint : {endpoint.ToJson()}");
                     HttpClient c = new HttpClient();
                     UriBuilder b = new UriBuilder("http", "localhost", endpoint.Port, cleanedPath);
                     b.Query = context.Request.QueryString.ToString();

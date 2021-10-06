@@ -1,5 +1,7 @@
+using Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SomeApi
+namespace TrafficApi
 {
     public class Startup
     {
@@ -26,9 +28,9 @@ namespace SomeApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddHostedService<RPServiceDiscovery>();
 
             services.AddSingleton<IManifestProvider, RPManifestProvider>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,10 +51,17 @@ namespace SomeApi
                 endpoints.MapControllers();
             });
         }
+
         public async Task OnApplicationStarted(IApplicationBuilder app)
         {
+            string address = app.ServerFeatures.Get<IServerAddressesFeature>()
+                  .Addresses
+                  .First();
+
+            var serverUri = new Uri(address);
+
             var routes = app.ApplicationServices.GetService<IEnumerable<EndpointDataSource>>();
-            await app.ApplicationServices.GetService<IManifestProvider>().Register(routes);            
+            await app.ApplicationServices.GetService<IManifestProvider>().Register(routes, new ServerAddress { Port = serverUri.Port });
         }
     }
 }

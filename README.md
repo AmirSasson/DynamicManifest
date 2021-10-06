@@ -4,13 +4,21 @@ the DynamicRoutes app has a DB of all registered endpoints, and upon request it 
 see diagram
 
 ```
-OUTER World      DynamicRoutes               Some api
-  |                   |                          |
-  |                   |  register routes+ port   |
-  |                   <--------------------------+
-  |                   |                          |
-  |    call X         |                          |
-  +------------------>|         Call x           |
-  |                   +------------------------->|
-  |                   |                          |
+OUTER World      DynamicRoutes               WeatherApi    TrafficApi
+  +                   +                          +             +
+  |                   |  Register                |             |
+  |                   <--------------------------+             |
+  |                   |                     Register           |
+  |                   +<-------------------------+-------------+
+  |                   |                          |             |
+  |    GetWeather     |                          |             |
+  +------------------>+         GetWeather       |             |
+  |                   +------------------------->+             |
+  |                   |                          |             |
+  |    GetTraffic     |                          |             |
+  +-----------------> |                          |             |
+  |                   |                    Get Traffic         |
+  |                   +--------------------------+------------>+
+  +                   +                          +             +
+
 ```

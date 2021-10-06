@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SomeApi
+namespace Common
 {
     public static class Extensions
     {
@@ -44,6 +44,15 @@ namespace SomeApi
         public static async Task<T> ReadBodyAsJsonAsync<T>(this HttpResponseMessage response)
         {
             return (await response.Content.ReadAsStringAsync()).FromJson<T>();
+        }
+
+        public static string ToClean(this object somePath)
+        {
+            return somePath.ToString().ToLower().Trim().Trim('/');
+        }
+        public static Task<TObj> AsTask<TObj>(this TObj any)
+        {
+            return Task.FromResult(any);
         }
     }
 }

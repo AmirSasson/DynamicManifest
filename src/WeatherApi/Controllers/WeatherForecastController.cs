@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Common;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SomeApi.Controllers
+namespace WeatherApi.Controllers
 {
+    [ApiVersion("2020-01-01")]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -36,7 +38,7 @@ namespace SomeApi.Controllers
             .ToArray();
         }
 
-
+        [ApiVersion("2020-01-01-preview")]
         [HttpGet("{name:alpha}")]
         [ManifestEndpoint(true, throttleLimit: 50, SomeMore = "amir")]
         public WeatherForecast GetByIdAnatString(string name)

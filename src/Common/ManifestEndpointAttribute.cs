@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SomeApi.Controllers
+namespace Common
 {
     public class ManifestEndpointAttribute : Attribute
     {
