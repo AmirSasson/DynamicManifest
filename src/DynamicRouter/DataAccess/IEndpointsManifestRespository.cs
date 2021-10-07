@@ -16,17 +16,24 @@ namespace DynamicRoutes.DataAccess
 
     public class InMemoryEndpointsManifestRespository : IEndpointsManifestRespository
     {
-        private readonly ConcurrentDictionary<string, ApiEndpoint> _manifestDB = new ConcurrentDictionary<string, ApiEndpoint>();
+        private readonly ConcurrentBag<ApiEndpoint> _manifestDB = new ConcurrentBag<ApiEndpoint>();
 
         public Task<ApiEndpoint> Add(ApiEndpoint endpoint)
         {
-            _manifestDB[endpoint.Path.ToClean()] = endpoint;
+            if(_manifestDB.Any(e => e.Path == endpoint.Path.ToClean() && endpoint.EndpointsPriority < e.EndpointsPriority))
+            {
+                // Illegal registrtion 
+            }
+            else
+            {
+                _manifestDB.Add(endpoint);
+            }                       
             return endpoint.AsTask();
         }
 
         public Task<IEnumerable<ApiEndpoint>> GetAll()
         {
-            return _manifestDB.Values.AsEnumerable().AsTask();
+            return _manifestDB.AsEnumerable().AsTask();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Common
 {
     public interface IManifestProvider
     {
-        Task Register(IEnumerable<EndpointDataSource> endpointSources, ServerAddress serverAddress);
+        Task Register(IEnumerable<EndpointDataSource> endpointSources, ServerAddress serverAddress, int defaultEndpointsPriority);
     }
     public class ServerAddress
     {

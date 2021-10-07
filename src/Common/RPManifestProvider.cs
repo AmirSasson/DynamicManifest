@@ -10,7 +10,7 @@ namespace Common
 {
     public class RPManifestProvider : IManifestProvider
     {
-        public async Task Register(IEnumerable<EndpointDataSource> endpointSources, ServerAddress serverAddress)
+        public async Task Register(IEnumerable<EndpointDataSource> endpointSources, ServerAddress serverAddress, int defaultEndpointsPriority)
         {
             HttpClient c = new HttpClient();
             var url = "http://localhost:5000/EndpointsManifest";
@@ -20,11 +20,11 @@ namespace Common
                 var manifestEndpointMetaData = endpoint?.Metadata?.SingleOrDefault(md => md is ManifestEndpointAttribute) as ManifestEndpointAttribute;
                 if (manifestEndpointMetaData?.Register ?? false)
                 {
-                    HashSet<string> versions = GetRouteVersion(endpoint);
+                    HashSet<string> versions = getRouteVersion(endpoint);
 
                     try
                     {
-                        var resp = await c.PutAsJsonAsync(url, new { throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = serverAddress.Port, apiVersions = versions });
+                        var resp = await c.PutAsJsonAsync(url, new { endpointsPriority = manifestEndpointMetaData.EndpointsPriority ?? defaultEndpointsPriority, throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = serverAddress.Port, apiVersions = versions });
                     }
                     catch (Exception e)
                     {
@@ -35,7 +35,7 @@ namespace Common
             }
         }
 
-        private static HashSet<string> GetRouteVersion(RouteEndpoint endpoint)
+        private static HashSet<string> getRouteVersion(RouteEndpoint endpoint)
         {
             var versions = new HashSet<string>();
             var apiVersionAction = endpoint?.Metadata?.SingleOrDefault(md => md is MapToApiVersionAttribute) as MapToApiVersionAttribute;
