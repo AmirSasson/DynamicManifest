@@ -37,10 +37,26 @@ OUTER World      DynamicRoutes               WeatherApi    TrafficApi
   |  Migrating to Different app/docker orcestrator | concept stays the same, the register should include the details to approach itself, on MSFT service fabric- it would be the Service Name + port, on K8s - the **cluster** IP+ port|
  
  
- # Performance aspect
+
+ 
+ # Risks
+* persistency
+* Performance 
+* Rollout 
+* Effort
+ 
+ ## Risks Mitagating
+  ### Performance aspect
  Each node on DynamicManifest saves a copy of the Enpoints manifest in memory, from the shared persisted storage (Manifest DB), and the middleware saves the fallback into controllers. so upon HttpCall ,no IO is needed to calculate the route. (memory copy can refresh every X minutes async)
- 
- 
+ ### persistency 
+  * choose carefully a reliable fault tollerant  
+    * good example: any X-Sql (MS,MY,posgress), Cosmos/dynamoDb/mongo, (Redis only with persistancy)
+    * Bad example: Memcache, Redis (default with no persistency)
+ ### Gradual rollout
+ * the Implementation is that Endpoint OPT-IN to use the feature, so this minimize the risk before adoption.
+ * DynamicRoutes can implement a fallback of controller, and by Rollout feature toggle, you can decide if to delagate to internal apis form a dedicated controller or from the Middle.  (Also can be achieved by identifing a flaf in the request querystring.) 
+ ### Effort
+ after deciding to adopt, you can switch the OPT-IN feature to ON by default. this would register all Endpoints on you app, with no efforts. 
  
  
  
