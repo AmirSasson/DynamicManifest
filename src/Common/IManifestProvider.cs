@@ -11,5 +11,6 @@ namespace Common
     public class ServerAddress
     {
         public int Port { get; set; }
+        public string ServerName { get; set; }
     }
 }

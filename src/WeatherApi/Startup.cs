@@ -62,7 +62,7 @@ namespace WeatherApi
             var serverUri = new Uri(address);
 
             var routes = app.ApplicationServices.GetService<IEnumerable<EndpointDataSource>>();
-            await app.ApplicationServices.GetService<IManifestProvider>().Register(routes, new ServerAddress { Port = serverUri.Port }, defaultEndpointsPriority: 0);
+            await app.ApplicationServices.GetService<IManifestProvider>().Register(routes, new ServerAddress { Port = serverUri.Port, ServerName = "WeatherApi" }, defaultEndpointsPriority: 0);
         }
     }
 }

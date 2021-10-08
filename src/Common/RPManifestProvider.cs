@@ -24,7 +24,7 @@ namespace Common
 
                     try
                     {
-                        var resp = await c.PutAsJsonAsync(url, new { endpointsPriority = manifestEndpointMetaData.EndpointsPriority ?? defaultEndpointsPriority, throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = serverAddress.Port, apiVersions = versions });
+                        var resp = await c.PutAsJsonAsync(url, new { service = serverAddress.ServerName, endpointsPriority = manifestEndpointMetaData.EndpointsPriority ?? defaultEndpointsPriority, throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = serverAddress.Port, apiVersions = versions });
                     }
                     catch (Exception e)
                     {
