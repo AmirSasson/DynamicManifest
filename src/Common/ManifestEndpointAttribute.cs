@@ -18,6 +18,13 @@ namespace Common
             ThrottleLimit = throttleLimit;
         }
 
+        public ManifestEndpointAttribute(bool register, int throttleLimit, int endpointsPriority)
+        {
+            Register = register;
+            ThrottleLimit = throttleLimit;
+            EndpointsPriority = endpointsPriority;
+        }
+
         public ManifestEndpointAttribute()
         {                       
         }

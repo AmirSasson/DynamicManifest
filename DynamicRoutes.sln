@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrafficApi", "src\TrafficAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Common\Common.csproj", "{9190D8A1-A1B5-48DD-9C0D-1DD1FE9AE883}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewWeatherApi", "src\NewWeatherApi\NewWeatherApi.csproj", "{596987E6-3FC8-4F62-8AE8-471C52437C6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9190D8A1-A1B5-48DD-9C0D-1DD1FE9AE883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9190D8A1-A1B5-48DD-9C0D-1DD1FE9AE883}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9190D8A1-A1B5-48DD-9C0D-1DD1FE9AE883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{596987E6-3FC8-4F62-8AE8-471C52437C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{596987E6-3FC8-4F62-8AE8-471C52437C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{596987E6-3FC8-4F62-8AE8-471C52437C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{596987E6-3FC8-4F62-8AE8-471C52437C6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

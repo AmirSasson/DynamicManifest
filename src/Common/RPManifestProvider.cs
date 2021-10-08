@@ -13,7 +13,7 @@ namespace Common
         public async Task Register(IEnumerable<EndpointDataSource> endpointSources, ServerAddress serverAddress, int defaultEndpointsPriority)
         {
             HttpClient c = new HttpClient();
-            var url = "http://localhost:5000/EndpointsManifest";
+            var url = "http://localhost:8080/EndpointsManifest";
 
             foreach (var endpoint in (endpointSources.First().Endpoints.Cast<RouteEndpoint>()))
             {

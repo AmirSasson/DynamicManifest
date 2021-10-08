@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WeatherApi
+namespace NewWeatherApi
 {
     public class Startup
     {
@@ -62,7 +62,7 @@ namespace WeatherApi
             var serverUri = new Uri(address);
 
             var routes = app.ApplicationServices.GetService<IEnumerable<EndpointDataSource>>();
-            await app.ApplicationServices.GetService<IManifestProvider>().Register(routes, new ServerAddress { Port = serverUri.Port }, defaultEndpointsPriority: 0);
+            await app.ApplicationServices.GetService<IManifestProvider>().Register(routes, new ServerAddress { Port = serverUri.Port }, defaultEndpointsPriority: 1);
         }
     }
 }
