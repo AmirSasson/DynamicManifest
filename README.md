@@ -31,7 +31,7 @@ OUTER World      DynamicRoutes               WeatherApi    TrafficApi
  | one of the instances in DynamicManifest restarts  | nothing, the routes are persisted, the node aquires the routes on load|
  | new version of WeatherApi Boots | new Apis are registered|
  | IP of WeatherApi is changed | dont care, it is identified by its Service/cluster name/ip no by single node|
- | 2 services "old" and "new" are booting in same fraction of second | Handled by priority, "Conccrency" conflict wont happen. both records (all regsitered record) are written to ManifestDb, but when fetching, we choose the right ones by priority|
+ | 2 services "old" and "new" are booting in same fraction of second | Handled by priority, "Concurrency conflict"/"race conditions" wont happen. both records (all regsitered record) are written to ManifestDb, but when fetching, we choose the right ones by priority|
  | WeatherApi is refactored and Some Endpoints moved to NewWeatherApiService | the NewWeatherApiService should registered in higher priority to catch the routes (even on "old" WeatherApi restarts ) |
  | Unregister a mistake endpoint| the "correct" endpoint should be register with higher priority(code change) OR this can be fixed manually in DB |
  |  illegal scenario - THe system identify more than 1 route that match a request on different services | illegal scenario - the system should fire an alert that should be monitored  |
