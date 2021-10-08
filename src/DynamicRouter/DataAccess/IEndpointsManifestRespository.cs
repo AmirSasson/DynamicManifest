@@ -22,21 +22,7 @@ namespace DynamicRoutes.DataAccess
         {
             var recordId = $"{endpoint.Service}#{endpoint.Path.ToClean()}#{endpoint.Port}";
             _manifestDB[recordId] = endpoint;
-            return endpoint.AsTask();
-            //_manifestDB.TryGetValue(endpoint.Path.ToClean(), out var existingResgistration);
-
-            //if (existingResgistration != null && existingResgistration.EndpointsPriority > endpoint.EndpointsPriority)
-            //{
-            //    // Illegal registration a higher version already registered
-            //    return endpoint.AsTask();
-            //}
-            //else
-            //{
-            //    _manifestDB[endpoint.Path.ToClean()] = endpoint;
-            //}
-
-
-            //return endpoint.AsTask();
+            return endpoint.AsTask();          
         }
 
         public Task<IEnumerable<ApiEndpoint>> GetAll()
