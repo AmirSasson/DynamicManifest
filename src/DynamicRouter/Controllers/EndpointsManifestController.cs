@@ -12,13 +12,11 @@ namespace DynamicRoutes.Controllers
     [ApiController]
     [Route("[controller]")]
     public class EndpointsManifestController : ControllerBase
-    {
-        private readonly ILogger<EndpointsManifestController> _logger;
+    {        
         private readonly IEndpointsManifestRespository _manifestRepo;
 
-        public EndpointsManifestController(ILogger<EndpointsManifestController> logger, IEndpointsManifestRespository manifestRepo)
-        {
-            _logger = logger;
+        public EndpointsManifestController(IEndpointsManifestRespository manifestRepo)
+        {            
             _manifestRepo = manifestRepo;
         }
 

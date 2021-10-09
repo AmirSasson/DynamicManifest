@@ -17,11 +17,8 @@ namespace TrafficApi.Controllers
             "Very Busy", "Moderate", "Free"
         };
 
-        private readonly ILogger<TrafficForecastController> _logger;
-
-        public TrafficForecastController(ILogger<TrafficForecastController> logger)
+        public TrafficForecastController()
         {
-            _logger = logger;
         }
 
         [HttpGet]

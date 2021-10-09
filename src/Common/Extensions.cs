@@ -23,18 +23,12 @@ namespace Common
 
         public static async Task<HttpResponseMessage> PutAsJsonAsync<T>(this HttpClient client, string url, T obj)
         {
-            using (var content = new StringContent(obj.ToJson(), Encoding.UTF8, "application/json"))
-            {
-#pragma warning disable CA2234 // Pass system uri objects instead of strings
-                return await client.PutAsync(url, content);
-#pragma warning restore CA2234 // Pass system uri objects instead of strings
-            }
+            using var content = new StringContent(obj.ToJson(), Encoding.UTF8, "application/json");
+            return await client.PutAsync(url, content);
         }
         public static async Task<(T obj, HttpResponseMessage res)> GetAsJsonAsync<T>(this HttpClient client, string url)
         {
-#pragma warning disable CA2234 // Pass system uri objects instead of strings
             var response = await client.GetAsync(url);
-#pragma warning restore CA2234 // Pass system uri objects instead of strings
             if (response.IsSuccessStatusCode)
             {
                 return ((await response.Content.ReadAsStringAsync()).FromJson<T>(), response);

@@ -17,11 +17,9 @@ namespace WeatherApi.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController()
         {
-            _logger = logger;
+
         }
 
         [HttpGet]
@@ -59,7 +57,7 @@ namespace WeatherApi.Controllers
             return new WeatherForecast
             {
                 Date = DateTime.Now,
-                TemperatureC = 4,
+                TemperatureC = id,
                 Summary = "GetByIdAnat"
             };
         }
@@ -72,7 +70,7 @@ namespace WeatherApi.Controllers
             return new WeatherForecast
             {
                 Date = DateTime.Now,
-                TemperatureC = 4,
+                TemperatureC = id,
                 Summary = WeatherForecastController.Summaries[0]
             };
         }

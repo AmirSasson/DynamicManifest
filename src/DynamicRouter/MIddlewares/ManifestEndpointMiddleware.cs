@@ -37,8 +37,10 @@ namespace DynamicRoutes.Middlewares
                 {
                     logger.LogInformation($"Delegating to endpoint : {endpoint.ToJson()}");
                     HttpClient c = new HttpClient();
-                    UriBuilder b = new UriBuilder("http", "localhost", endpoint.Port, cleanedPath);
-                    b.Query = context.Request.QueryString.ToString();
+                    UriBuilder b = new UriBuilder("http", "localhost", endpoint.Port, cleanedPath)
+                    {
+                        Query = context.Request.QueryString.ToString()
+                    };
                     using var req = new HttpRequestMessage(new HttpMethod(context.Request.Method), b.Uri) {/* body.. headers .. more */};
                     var resp = await c.SendAsync(req);
                     context.Response.StatusCode = (int)resp.StatusCode;

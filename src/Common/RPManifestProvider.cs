@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,12 @@ namespace Common
 {
     public class RPManifestProvider : IManifestProvider
     {
+        private readonly ILogger<RPManifestProvider> _logger;
+
+        public RPManifestProvider(ILogger<RPManifestProvider> logger)
+        {
+            _logger = logger;
+        }
         public async Task Register(IEnumerable<EndpointDataSource> endpointSources, ServerAddress serverAddress, int defaultEndpointsPriority)
         {
             HttpClient c = new HttpClient();
@@ -22,12 +29,15 @@ namespace Common
                 {
                     HashSet<string> versions = getRouteVersion(endpoint);
 
+                    var ep = new { service = serverAddress.ServerName, endpointsPriority = manifestEndpointMetaData.EndpointsPriority ?? defaultEndpointsPriority, throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = serverAddress.Port, apiVersions = versions };
                     try
                     {
-                        var resp = await c.PutAsJsonAsync(url, new { service = serverAddress.ServerName, endpointsPriority = manifestEndpointMetaData.EndpointsPriority ?? defaultEndpointsPriority, throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText, port = serverAddress.Port, apiVersions = versions });
+
+                        var resp = await c.PutAsJsonAsync(url,ep );
                     }
                     catch (Exception e)
                     {
+                        _logger.LogError(e, $"failed to register {ep.ToJson()}");
                         throw;
                     }
                 }
