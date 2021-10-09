@@ -33,13 +33,27 @@ namespace Common
                     try
                     {
 
-                        var resp = await c.PutAsJsonAsync(url,ep );
+                        var resp = await c.PutAsJsonAsync(url, ep);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"failed to register {ep.ToJson()}");
                         throw;
                     }
+                    //for (int i = 0; i < 300; i++)
+                    //{
+                    //    var epStress = new { service = serverAddress.ServerName, endpointsPriority = manifestEndpointMetaData.EndpointsPriority ?? defaultEndpointsPriority, throttleLimit = manifestEndpointMetaData.ThrottleLimit, path = endpoint.RoutePattern.RawText + i.ToString(), port = serverAddress.Port, apiVersions = versions };
+                    //    try
+                    //    {
+
+                    //        var resp = await c.PutAsJsonAsync(url, epStress);
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        _logger.LogError(e, $"failed to register {epStress.ToJson()}");
+                    //        throw;
+                    //    }
+                    //}
                 }
 
             }

@@ -48,7 +48,9 @@ OUTER World      DynamicRoutes               WeatherApi    TrafficApi
  
  ## Risks Mitagating
   ### Performance aspect
- Each node on DynamicManifest saves a copy of the Enpoints manifest in memory, from the shared persisted storage (Manifest DB), and the middleware saves the fallback into controllers. so upon HttpCall ,no IO is needed to calculate the route. (memory copy can refresh every X minutes async)
+ Each node on DynamicManifest saves a copy of the Enpoints manifest in memory, from the shared persisted storage (Manifest DB), and the middleware saves the fallback into controllers.  
+ so upon HttpCall ,no IO is needed to calculate the route. (memory copy can refresh every X minutes async)  
+ from benchmarks results it seems that it take ~10ms to calculate the right endpoint out of 1000 endpoints that were registered. (while not running the Endpoints middleware down the pipe, which takes ~5ms, so 5ms more in total)
  ### persistency 
   * choose carefully a reliable fault tollerant  
     * good example: any X-Sql (MS,MY,posgress), Cosmos/dynamoDb/mongo, (Redis only with persistancy)

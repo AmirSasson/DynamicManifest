@@ -69,7 +69,7 @@ namespace DynamicRoutes.DataAccess
                 // dont re-add if running out of memory or it was forcibly removed
                 if (reason == EvictionReason.Expired || reason == EvictionReason.TokenExpired)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(10));
+                    // await Task.Delay(TimeSpan.FromSeconds(10));
                     await _cache.GetOrAddAsync("all", async (_) => await readFromDb(), getCacheOptions()); //calls itself to get another set of options!
                 }
             });

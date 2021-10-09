@@ -60,7 +60,7 @@ namespace DynamicRoutes.Middlewares
         }
 
         private static async Task<ApiEndpoint> getEndpoint(HttpContext context, IEndpointsManifestRespository endpointRepo)
-        {
+        {            
             var endpoint = (await endpointRepo.GetAll()).FirstOrDefault(ep =>
             {
                 var template = TemplateParser.Parse(ep.Path);
